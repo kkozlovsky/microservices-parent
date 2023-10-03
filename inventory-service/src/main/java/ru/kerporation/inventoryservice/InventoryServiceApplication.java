@@ -1,6 +1,5 @@
 package ru.kerporation.inventoryservice;
 
-import lombok.Builder;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,9 +25,9 @@ public class InventoryServiceApplication {
 			inventory1.setSkuCode("iphone_13_red");
 			inventory1.setQuantity(0);
 
-            inventoryRepository.save(inventory0);
-            inventoryRepository.save(inventory1);
-        };
+			inventoryRepository.save(inventory0);
+			inventoryRepository.save(inventory1);
+		};
 	}
 
 }
