@@ -13,11 +13,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InventoryController {
 
-	private final InventoryService inventoryService;
+    private final InventoryService inventoryService;
 
-	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
-	public List<InventoryResponse> isInStock(@RequestParam final List<String> skuCode) {
-		return inventoryService.isInStock(skuCode);
-	}
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<InventoryResponse> isInStock(@RequestParam final List<String> skuCode) {
+        return inventoryService.isInStock(skuCode);
+    }
 }

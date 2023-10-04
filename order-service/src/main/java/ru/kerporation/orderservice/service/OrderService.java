@@ -22,36 +22,36 @@ import static java.util.Objects.nonNull;
 @Transactional
 public class OrderService {
 
-	private final ConversionService conversionService;
-	private final OrderRepository orderRepository;
-	private final WebClient webClient;
+    private final ConversionService conversionService;
+    private final OrderRepository orderRepository;
+    private final WebClient webClient;
 
-	public void placeOrder(final OrderRequest orderRequest) {
-		final Order order = new Order();
-		order.setOrderNumber(UUID.randomUUID().toString());
+    public void placeOrder(final OrderRequest orderRequest) {
+        final Order order = new Order();
+        order.setOrderNumber(UUID.randomUUID().toString());
 
-		final List<OrderLineItems> orderLineItemsList = orderRequest.getOrderLineItemsDtoList()
-				.stream()
-				.map(orderLineItemsDto -> conversionService.convert(orderLineItemsDto, OrderLineItems.class))
-				.toList();
+        final List<OrderLineItems> orderLineItemsList = orderRequest.getOrderLineItemsDtoList()
+                .stream()
+                .map(orderLineItemsDto -> conversionService.convert(orderLineItemsDto, OrderLineItems.class))
+                .toList();
 
-		order.setOrderLineItemsList(orderLineItemsList);
+        order.setOrderLineItemsList(orderLineItemsList);
 
-		final List<String> skuCodes = order.getOrderLineItemsList().stream().map(OrderLineItems::getSkuCode).toList();
+        final List<String> skuCodes = order.getOrderLineItemsList().stream().map(OrderLineItems::getSkuCode).toList();
 
-		final InventoryResponse[] inventoryResponseArray = webClient.get()
-				.uri("http://localhost:8082/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
-				.retrieve()
-				.bodyToMono(InventoryResponse[].class)
-				.block();
+        final InventoryResponse[] inventoryResponseArray = webClient.get()
+                .uri("http://localhost:8082/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
+                .retrieve()
+                .bodyToMono(InventoryResponse[].class)
+                .block();
 
-		final boolean allProductsInStock = nonNull(inventoryResponseArray) && Arrays.stream(inventoryResponseArray).allMatch(InventoryResponse::getIsInStock);
+        final boolean allProductsInStock = nonNull(inventoryResponseArray) && Arrays.stream(inventoryResponseArray).allMatch(InventoryResponse::getIsInStock);
 
-		if (allProductsInStock) {
-			orderRepository.save(order);
-		} else {
-			throw new IllegalStateException("Product is out of stock");
-		}
+        if (allProductsInStock) {
+            orderRepository.save(order);
+        } else {
+            throw new IllegalStateException("Product is out of stock");
+        }
 
-	}
+    }
 }
