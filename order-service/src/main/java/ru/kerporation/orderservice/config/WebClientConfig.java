@@ -14,4 +14,11 @@ public class WebClientConfig {
         return WebClient
                 .builder();
     }
+
+//    @Bean
+//    public RestTemplateTransportClientFactories restTemplateTransportClientFactories(final EurekaClientHttpRequestFactorySupplier supplier) {
+//        return new RestTemplateTransportClientFactories(new RestTemplateDiscoveryClientOptionalArgs(supplier));
+//    }
+
+
 }
