@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.kerporation.orderservice.dto.InventoryResponse;
 import ru.kerporation.orderservice.dto.OrderRequest;
+import ru.kerporation.orderservice.event.OrderPlacedEvent;
 import ru.kerporation.orderservice.model.Order;
 import ru.kerporation.orderservice.model.OrderLineItems;
 import ru.kerporation.orderservice.repository.OrderRepository;
@@ -28,6 +30,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
     private final Tracer tracer;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public String placeOrder(final OrderRequest orderRequest) {
         final Order order = new Order();
@@ -55,6 +58,7 @@ public class OrderService {
 
             if (allProductsInStock) {
                 orderRepository.save(order);
+                kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
                 return "Order placed successfully";
             } else {
                 throw new IllegalStateException("Product is out of stock");
