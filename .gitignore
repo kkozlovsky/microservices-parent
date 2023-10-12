@@ -79,3 +79,8 @@ fabric.properties
 
 */target/
 /.idea/
+/postgres-inventory/
+/postgres-order/
+/mongo-data/
+/mysql_keycloak_data/
+/.idea/
