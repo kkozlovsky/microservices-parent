@@ -36,7 +36,7 @@ services:
   ## Mongo Docker Compose Config
   mongo:
     container_name: mongo
-    image: mongo:4.4.14-rc0-focal
+    image: mongo:4.1.13
     restart: unless-stopped
     ports:
       - "27017:27017"
@@ -142,10 +142,13 @@ services:
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_URI=mongodb://localhost:27017/product-service
     depends_on:
       - mongo
       - discovery-server
       - api-gateway
+    links:
+      - mongo
 
   ## Order-Service Docker Compose Config
   order-service:
