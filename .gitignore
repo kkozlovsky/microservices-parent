@@ -84,3 +84,4 @@ fabric.properties
 /mongo-data/
 /mysql_keycloak_data/
 /.idea/
+/postgres-product/

@@ -6,7 +6,7 @@ services:
     container_name: postgres-order
     image: postgres
     environment:
-      POSTGRES_DB: order-service
+      POSTGRES_DB: order_service
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
@@ -19,11 +19,28 @@ services:
     command: -p 5431
     restart: unless-stopped
 
+  postgres-product:
+    container_name: postgres-product
+    image: postgres
+    environment:
+      POSTGRES_DB: product_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-product:/data/postgres
+    expose:
+      - "5430"
+    ports:
+      - "5430:5430"
+    command: -p 5430
+    restart: unless-stopped
+
   postgres-inventory:
     container_name: postgres-inventory
     image: postgres
     environment:
-      POSTGRES_DB: inventory-service
+      POSTGRES_DB: inventory_service
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
@@ -32,18 +49,6 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
-
-  ## Mongo Docker Compose Config
-  mongo:
-    container_name: mongo
-    image: mongo:4.1.13
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    expose:
-      - "27017"
-    volumes:
-      - ./mongo-data:/data/db
 
   ## Keycloak Config with Mysql database
   keycloak-mysql:
@@ -142,13 +147,11 @@ services:
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_URI=mongodb://localhost:27017/product-service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-product:5430/product_service
     depends_on:
-      - mongo
+      - postgres-product
       - discovery-server
       - api-gateway
-    links:
-      - mongo
 
   ## Order-Service Docker Compose Config
   order-service:
@@ -157,7 +160,7 @@ services:
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/order-service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/order_service
     depends_on:
       - postgres-order
       - broker
@@ -172,9 +175,11 @@ services:
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inventory-service
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inventory_service
     depends_on:
       - postgres-inventory
+      - broker
+      - zipkin
       - discovery-server
       - api-gateway
 
