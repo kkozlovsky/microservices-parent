@@ -1,0 +1,181 @@
+{
+	"info": {
+		"_postman_id": "c3f8ee39-96c7-4864-a0fb-90b1ea6d847a",
+		"name": "Spring Boot Microservices Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4116788"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8181/api/product",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessTokenUrl",
+							"value": "http://keycloak:8080/realms/spring-boot-microservices-realm/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid offline_access",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "spring-cloud-client",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "PjjdAQzuv3clKbqTtwFpHdud61Q6CrSK",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "token",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIxeFE2V3lkNUFZWEtrS3hYQlczaXREcWhrOUliaFppUGNYZTk4QXAtanpVIn0.eyJleHAiOjE2OTY3Njg3MTUsImlhdCI6MTY5Njc2ODQxNSwianRpIjoiOWJlNmE0NTAtYmFkYS00MGE4LTk0MmYtYTMyNWU3NGI4NTVkIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MTgxL3JlYWxtcy9zcHJpbmctYm9vdC1taWNyb3NlcnZpY2VzLXJlYWxtIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImNmZmVjMmYyLTQ0ZTUtNDJlZi04MDVkLTA0ZWU0YWRmNmFmYiIsInR5cCI6IkJlYXJlciIsImF6cCI6InNwcmluZy1jbG91ZC1jbGllbnQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiZGVmYXVsdC1yb2xlcy1zcHJpbmctYm9vdC1taWNyb3NlcnZpY2VzLXJlYWxtIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsic3ByaW5nLWNsb3VkLWNsaWVudCI6eyJyb2xlcyI6WyJ1bWFfcHJvdGVjdGlvbiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgb2ZmbGluZV9hY2Nlc3MgcHJvZmlsZSBlbWFpbCIsImNsaWVudEhvc3QiOiIxOTIuMTY4LjY1LjEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6InNlcnZpY2UtYWNjb3VudC1zcHJpbmctY2xvdWQtY2xpZW50IiwiY2xpZW50QWRkcmVzcyI6IjE5Mi4xNjguNjUuMSIsImNsaWVudF9pZCI6InNwcmluZy1jbG91ZC1jbGllbnQifQ.SObC2krv5P8ozXI-MaGGvvXbgsKbdTcOeJiB3rYsPsdLSbYWklV9R2EpOh73hi61X2O3pyxxWFy94TIxOWpzKe1jz8nIKeK1Fbur66FMRuPfyw5IBjIUrOAN9rAYCeP8_Sfr7KL5mnqRFc6-IAon9RYXPVDXXP3K6Il7vbYvqTXJMfPv-qqMQE8RdkixH-QRd8PQ88zq0jNMIB59QT85JBNqCSOrQ9xdobrKxckBLd7ZKLoe-iU50EvqtPWJHSEvq2uNAOZb2T_uzU6SPQhzLupJvT_Ekl2JUwEjoPmZzEZy0u4AV0znQG7cYH4uPlth_NBjdsBYDJU3TyDZZ8Y0JA",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Iphone 13\",\n\t\"description\": \"Iphone 13\",\n\t\"price\": 1200\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8181/api/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"api",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8181/api/product",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIxeFE2V3lkNUFZWEtrS3hYQlczaXREcWhrOUliaFppUGNYZTk4QXAtanpVIn0.eyJleHAiOjE2OTY3Njg3MTUsImlhdCI6MTY5Njc2ODQxNSwianRpIjoiOWJlNmE0NTAtYmFkYS00MGE4LTk0MmYtYTMyNWU3NGI4NTVkIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MTgxL3JlYWxtcy9zcHJpbmctYm9vdC1taWNyb3NlcnZpY2VzLXJlYWxtIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImNmZmVjMmYyLTQ0ZTUtNDJlZi04MDVkLTA0ZWU0YWRmNmFmYiIsInR5cCI6IkJlYXJlciIsImF6cCI6InNwcmluZy1jbG91ZC1jbGllbnQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiZGVmYXVsdC1yb2xlcy1zcHJpbmctYm9vdC1taWNyb3NlcnZpY2VzLXJlYWxtIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsic3ByaW5nLWNsb3VkLWNsaWVudCI6eyJyb2xlcyI6WyJ1bWFfcHJvdGVjdGlvbiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgb2ZmbGluZV9hY2Nlc3MgcHJvZmlsZSBlbWFpbCIsImNsaWVudEhvc3QiOiIxOTIuMTY4LjY1LjEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6InNlcnZpY2UtYWNjb3VudC1zcHJpbmctY2xvdWQtY2xpZW50IiwiY2xpZW50QWRkcmVzcyI6IjE5Mi4xNjguNjUuMSIsImNsaWVudF9pZCI6InNwcmluZy1jbG91ZC1jbGllbnQifQ.SObC2krv5P8ozXI-MaGGvvXbgsKbdTcOeJiB3rYsPsdLSbYWklV9R2EpOh73hi61X2O3pyxxWFy94TIxOWpzKe1jz8nIKeK1Fbur66FMRuPfyw5IBjIUrOAN9rAYCeP8_Sfr7KL5mnqRFc6-IAon9RYXPVDXXP3K6Il7vbYvqTXJMfPv-qqMQE8RdkixH-QRd8PQ88zq0jNMIB59QT85JBNqCSOrQ9xdobrKxckBLd7ZKLoe-iU50EvqtPWJHSEvq2uNAOZb2T_uzU6SPQhzLupJvT_Ekl2JUwEjoPmZzEZy0u4AV0znQG7cYH4uPlth_NBjdsBYDJU3TyDZZ8Y0JA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8181/api/order",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessTokenUrl",
+							"value": "http://localhost:8181/realms/spring-boot-microservices-realm/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid offline_access",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "spring-cloud-client",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "PjjdAQzuv3clKbqTtwFpHdud61Q6CrSK",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "token",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"orderLineItemsDtoList\": [\n\t\t{\n\t\t\t\"skuCode\": \"iphone_13\",\n\t\t\t\"price\": 1200,\n\t\t\t\"quantity\": 1\n\t\t}\n\t]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/order",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"order"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
