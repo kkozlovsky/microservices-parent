@@ -81,7 +81,6 @@ fabric.properties
 /.idea/
 /postgres-inventory/
 /postgres-order/
-/mongo-data/
-/mysql_keycloak_data/
-/.idea/
 /postgres-product/
+/mysql_keycloak_data/
+/grafana/
