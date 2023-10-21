@@ -1,28 +1,35 @@
 package ru.kerporation.discoveryserver.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     @Value("${app.eureka.username}")
     private String username;
     @Value("${app.eureka.password}")
     private String password;
 
-    @Override
-    protected void configure(final AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.inMemoryAuthentication()
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .withUser(username).password(password).authorities("USER");
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService() {
+        final UserDetails user = User.withDefaultPasswordEncoder()
+                .username(username)
+                .password(password)
+                .roles("USER")
+                .authorities("USER")
+                .build();
+        return new InMemoryUserDetailsManager(user);
     }
 
 //    @Override
@@ -34,8 +41,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .httpBasic();
 //    }
 
-    @Override
-    protected void configure(final HttpSecurity http) throws Exception {
-        http.csrf().disable();
+
+    @Bean
+    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests((authz) -> authz.anyRequest().authenticated())
+                .httpBasic(withDefaults())
+                .csrf(AbstractHttpConfigurer::disable);
+//                .ignoringRequestMatchers("/eureka/**");
+        return http.build();
+    }
+
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/eureka/**");
     }
 }

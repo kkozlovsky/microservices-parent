@@ -37,9 +37,9 @@ class ProductServiceApplicationTests {
     @Container
     final static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres");
 
-//    static {
-//        postgres.start();
-//    }
+    static {
+        postgres.start();
+    }
 
     @DynamicPropertySource
     static void setProperties(final DynamicPropertyRegistry dynamicPropertyRegistry) {
@@ -64,8 +64,8 @@ class ProductServiceApplicationTests {
 
         final List<ProductResponse> allProducts = productService.getAllProducts();
 
-        Assertions.assertEquals(1, allProducts.size());
-        final ProductResponse productResponse = allProducts.get(0);
+        Assertions.assertEquals(2, allProducts.size());
+        final ProductResponse productResponse = allProducts.get(1);
 
         Assertions.assertEquals("IPhone13", productResponse.getName());
         Assertions.assertEquals("IPhone 13", productResponse.getDescription());

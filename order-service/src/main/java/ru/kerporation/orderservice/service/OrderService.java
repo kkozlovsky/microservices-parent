@@ -1,10 +1,11 @@
 package ru.kerporation.orderservice.service;
 
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.sleuth.Span;
-import org.springframework.cloud.sleuth.Tracer;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,13 +25,15 @@ import static java.util.Objects.nonNull;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class OrderService {
 
     private final ConversionService conversionService;
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
-    private final Tracer tracer;
-    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+    private final ObservationRegistry observationRegistry;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
 
     public String placeOrder(final OrderRequest orderRequest) {
         final Order order = new Order();
@@ -45,9 +48,12 @@ public class OrderService {
 
         final List<String> skuCodes = order.getOrderLineItemsList().stream().map(OrderLineItems::getSkuCode).toList();
 
-        final Span inventoryServiceLookup = tracer.nextSpan().name("InventoryServiceLookup");
-
-        try (final Tracer.SpanInScope spanInScope = tracer.withSpan(inventoryServiceLookup.start())) {
+        // Call Inventory Service, and place order if a product is in
+        // stock
+        Observation inventoryServiceObservation = Observation.createNotStarted("inventory-service-lookup",
+                this.observationRegistry);
+        inventoryServiceObservation.lowCardinalityKeyValue("call", "inventory-service");
+        return inventoryServiceObservation.observe(() -> {
             final InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
                     .uri("http://inventory-service/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
                     .retrieve()
@@ -58,14 +64,13 @@ public class OrderService {
 
             if (allProductsInStock) {
                 orderRepository.save(order);
-                kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
+                // publish Order Placed Event
+                applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, order.getOrderNumber()));
                 return "Order placed successfully";
             } else {
                 throw new IllegalStateException("Product is out of stock");
             }
-        } finally {
-            inventoryServiceLookup.end();
-        }
-
+        });
     }
+
 }

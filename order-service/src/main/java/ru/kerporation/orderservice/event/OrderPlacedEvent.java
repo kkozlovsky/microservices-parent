@@ -1,12 +1,21 @@
 package ru.kerporation.orderservice.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.context.ApplicationEvent;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class OrderPlacedEvent {
-    private String orderNumber;
+@Getter
+@Setter
+public class OrderPlacedEvent extends ApplicationEvent {
+    private final String orderNumber;
+
+    public OrderPlacedEvent(final Object source, final String orderNumber) {
+        super(source);
+        this.orderNumber = orderNumber;
+    }
+
+    public OrderPlacedEvent(final String orderNumber) {
+        super(orderNumber);
+        this.orderNumber = orderNumber;
+    }
 }
